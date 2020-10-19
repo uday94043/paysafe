@@ -9,7 +9,7 @@
 
     <body>
             <div style="color:blue;text-align:center;">
-                <h1 class="display-4">ROIIM Payment</h1>
+                <h1>ROIIM Payment</h1>
             </div>
             <form style="color:blue;text-align:center;">
                 <p>All fields are mandatory</p>
@@ -28,11 +28,6 @@
                   <input type="email" id="email" placeholder="enter email" value="">
                 </div>
                 <br>
-                <div>
-                  <label for="amount">Amount</label>
-                  <input type="text" id="amount" placeholder="enter amount" value="">
-                </div>
-                <br>
                 <div class="form-group">
                     <label for="street">Street</label>
                     <input type="text" id="street" placeholder="enter street name" value="">
@@ -48,8 +43,19 @@
                     <input type="text" id="country" placeholder="" value="IN">
                 </div>
                 <br>
+                <div>
+                    <label for="amount">Amount</label>
+                    <input type="text" id="amount" placeholder="enter amount" value="">
+                </div>
+
+                <br>
                 <button type="submit" >Proceed to Pay</button>
               </form>
+            <div style="color:grey;text-align:center;">
+                <a href="https://developer.paysafe.com/en/rest-apis/cards/test-and-go-live/test-cards/">
+                    test with these cards for payment
+                </a>
+            </div>
     </body>
         <script>
         let refNum= "ROIIM"+Math.floor(Math.random()*10000);
@@ -115,7 +121,7 @@
                     "email": document.getElementById("email").value
                     };
                     $.ajax({
-                        url: 'http://localhost:8080/token',
+                        url: 'https://roiim-hiring.herokuapp.com/token',
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
@@ -153,7 +159,7 @@
                     }
                     // make AJAX call to Payments API
                     $.ajax({
-                        url: 'http://localhost:8080/payment',
+                        url: 'https://roiim-hiring.herokuapp.com/payment',
                         type: 'post',
                         data: JSON.stringify( data),
                         contentType: 'application/json',
