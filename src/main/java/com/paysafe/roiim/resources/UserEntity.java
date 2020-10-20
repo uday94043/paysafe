@@ -1,8 +1,6 @@
 package com.paysafe.roiim.resources;
-
 import javax.persistence.*;
 
-//This class is stored in db.
 @Entity
 public class UserEntity {
     @Id
@@ -11,11 +9,6 @@ public class UserEntity {
     private String email;
     private String customerId;
     private String merchantCustomerId;
-
-    public UserEntity()
-    {
-
-    }
 
     public UserEntity(String email, String customerId, String merchantCustomerId) {
         this.email = email;

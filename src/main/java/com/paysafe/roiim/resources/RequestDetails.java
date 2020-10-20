@@ -10,8 +10,6 @@ public class RequestDetails {
     private String email;
     private String merchantCustomerId;
     private String customerId;
-    private boolean settleWithAuth=true;
-    private boolean dupCheck=true;
 
     public String getEmail() {
         return email;

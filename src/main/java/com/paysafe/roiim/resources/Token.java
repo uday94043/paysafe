@@ -8,8 +8,6 @@ public class Token {
     private String currencyCode;
     private String merchantCustomerId;
     private String customerId;
-    private boolean settleWithAuth=true;
-    private boolean dupCheck=true;
 
     public Token(String paymentHandleToken, String merchantRefNum, Integer amount, String currencyCode) {
         this.paymentHandleToken = paymentHandleToken;

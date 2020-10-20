@@ -22,21 +22,16 @@ public class Controller {
     @Autowired
     private UserRepository userRepository;
 
-    //url link
-    final String url="https://api.test.paysafe.com/paymenthub/v1/payments";
-    RestTemplate restTemplate= new RestTemplate();
-
     //generate SingleUseCustomerToken
     @PostMapping(path="/token", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public SingleUseCustomerTokenRequest customerIdCheck(@RequestBody RequestDetails requestEmail)
-    {
+    public SingleUseCustomerTokenRequest customerIdCheck(@RequestBody RequestDetails requestEmail) {
+
         String email= requestEmail.getEmail();
         if(userRepository.findByEmail(email) == null)
             return null;
             //else block will fetch singleUseCustomerToken from paysafe server
-        else
-        {
+        else {
             String id= userRepository.findByEmail(email).getCustomerId();
             String url="https://api.test.paysafe.com/paymenthub/v1/customers/"+id+"/singleusecustomertokens";
             HttpHeaders headers = new HttpHeaders();
@@ -45,32 +40,29 @@ public class Controller {
             String body= "{ \"paymentTypes\": [\"CARD\"] }";
             HttpEntity<String> request= new HttpEntity<>(body,headers);
             RestTemplate restTemplate= new RestTemplate();
-            ResponseEntity<SingleUseCustomerTokenRequest>response=restTemplate.postForEntity(url,request, SingleUseCustomerTokenRequest.class);
+            ResponseEntity<SingleUseCustomerTokenRequest> response=restTemplate.postForEntity(url,request, SingleUseCustomerTokenRequest.class);
             return response.getBody();
         }
     }
 
     //processing payment and save card
     @PostMapping("/payment")
-    public HttpStatus payment(@RequestBody RequestDetails requestDetails)
-    {
+    public HttpStatus payment(@RequestBody RequestDetails requestDetails) {
+
         System.out.println("Ref num is "+requestDetails.getMerchantRefNum());
         System.out.println("Token is "+requestDetails.getPaymentHandleToken());
 
         Token token = new Token(requestDetails.getPaymentHandleToken(), requestDetails.getMerchantRefNum(),requestDetails.getAmount(),requestDetails.getCurrencyCode());
 
         //save card flow
-        if(requestDetails.getCustomerOperation()!=null && requestDetails.getCustomerOperation().equals("ADD"))
-        {
+        if(requestDetails.getCustomerOperation()!=null && requestDetails.getCustomerOperation().equals("ADD")) {
             String merchantCustomerId;
             //Below block will generate merchantCustomerId
             if(userRepository.findByEmail( requestDetails.getEmail() ) == null) {
                 System.out.println("cid is "+token.getCustomerId());
-
                 do{
                     long number = ThreadLocalRandom.current().nextLong(1000000);
                     merchantCustomerId = "ROIIMCustomer" + number;
-
                 }
                 while (userRepository.findByMerchantCustomerId(merchantCustomerId) !=  null);
 
@@ -80,18 +72,19 @@ public class Controller {
             else{
                 token.setCustomerId(userRepository.findByEmail(requestDetails.getEmail()).getCustomerId());
                 System.out.println("cid is "+token.getCustomerId());
-
             }
-
         }
+        final String url="https://api.test.paysafe.com/paymenthub/v1/payments";
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization","Basic cHJpdmF0ZS03NzUxOkItcWEyLTAtNWYwMzFjZGQtMC0zMDJkMDIxNDQ5NmJlODQ3MzJhMDFmNjkwMjY4ZDNiOGViNzJlNWI4Y2NmOTRlMjIwMjE1MDA4NTkxMzExN2YyZTFhODUzMTUwNWVlOGNjZmM4ZTk4ZGYzY2YxNzQ4");
+        headers.add("Content-Type","application/json");
         HttpEntity<Token> request = new HttpEntity<Token>(token, headers);
+        RestTemplate restTemplate= new RestTemplate();
         ResponseEntity<UserEntity> result = restTemplate.postForEntity(url, request, UserEntity.class);
 
         //if user is registering for first time, below block will save their respective customer ID in db
-        if(requestDetails.getCustomerOperation() != null && requestDetails.getCustomerOperation().equals("ADD") && token.getMerchantCustomerId() != null)
-        {
+        if(requestDetails.getCustomerOperation() != null && requestDetails.getCustomerOperation().equals("ADD") && token.getMerchantCustomerId() != null) {
+
             UserEntity userEntity = new UserEntity(requestDetails.getEmail(),result.getBody().getCustomerId(),token.getMerchantCustomerId());
             userRepository.save(userEntity);
         }
