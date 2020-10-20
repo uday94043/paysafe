@@ -10,6 +10,8 @@ public class UserEntity {
     private String customerId;
     private String merchantCustomerId;
 
+    public UserEntity(){}
+
     public UserEntity(String email, String customerId, String merchantCustomerId) {
         this.email = email;
         this.customerId = customerId;
