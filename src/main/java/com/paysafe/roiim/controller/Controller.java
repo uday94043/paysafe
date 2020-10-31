@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.paysafe.roiim.Constants.API_KEY;
+
 
 @CrossOrigin
 @RestController
@@ -33,13 +35,13 @@ public class Controller {
             String id= userRepository.findByEmail(email).getCustomerId();
             String url="https://api.test.paysafe.com/paymenthub/v1/customers/"+id+"/singleusecustomertokens";
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization","Basic cHJpdmF0ZS03NzUxOkItcWEyLTAtNWYwMzFjZGQtMC0zMDJkMDIxNDQ5NmJlODQ3MzJhMDFmNjkwMjY4ZDNiOGViNzJlNWI4Y2NmOTRlMjIwMjE1MDA4NTkxMzExN2YyZTFhODUzMTUwNWVlOGNjZmM4ZTk4ZGYzY2YxNzQ4");
+            headers.add("Authorization",API_KEY);
             headers.add("Content-Type","application/json");
             HttpEntity<SingleUseReqBody> request= new HttpEntity<SingleUseReqBody>(singleUseReqBody,headers);
-            RestTemplate restTemplate= new RestTemplate();
-            ResponseEntity<SingleUseCustomerTokenRequest> response=restTemplate.postForEntity(url,request, SingleUseCustomerTokenRequest.class);
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<SingleUseCustomerTokenRequest> result = restTemplate.postForEntity(url, request, SingleUseCustomerTokenRequest.class);
             //System.out.println(singleUseReqBody.getMerchantRefNumber());
-            return response.getBody();
+            return (result.getBody() != null) ? result.getBody() : null;
         }
     }
 
@@ -68,14 +70,15 @@ public class Controller {
         }
         final String url="https://api.test.paysafe.com/paymenthub/v1/payments";
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization","Basic cHJpdmF0ZS03NzUxOkItcWEyLTAtNWYwMzFjZGQtMC0zMDJkMDIxNDQ5NmJlODQ3MzJhMDFmNjkwMjY4ZDNiOGViNzJlNWI4Y2NmOTRlMjIwMjE1MDA4NTkxMzExN2YyZTFhODUzMTUwNWVlOGNjZmM4ZTk4ZGYzY2YxNzQ4");
+        headers.add("Authorization",API_KEY);
         headers.add("Content-Type","application/json");
         HttpEntity<Token> request = new HttpEntity<Token>(token, headers);
         RestTemplate restTemplate= new RestTemplate();
         ResponseEntity<UserEntity> result = restTemplate.postForEntity(url, request, UserEntity.class);
 
         //if user is registering for first time, this block will save their customer ID in db
-        if(result.getBody() != null && requestDetails.getCustomerOperation() != null && requestDetails.getCustomerOperation().equals("ADD") && token.getMerchantCustomerId() != null) {
+        if(result.getBody() != null && requestDetails.getCustomerOperation() != null && requestDetails.getCustomerOperation().equals("ADD")
+                && token.getMerchantCustomerId() != null) {
             UserEntity userEntity = new UserEntity(requestDetails.getEmail(),result.getBody().getCustomerId(),token.getMerchantCustomerId());
             userRepository.save(userEntity);
         }

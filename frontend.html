@@ -60,6 +60,7 @@
             let refNum= "ref"+Math.floor(Math.random()*100000);
             let refNum1= "ref"+Math.floor(Math.random()*100000);
             let refNum2= "ref"+Math.floor(Math.random()*100000);
+            let API_KEY = "cHVibGljLTc3NTE6Qi1xYTItMC01ZjAzMWNiZS0wLTMwMmQwMjE1MDA4OTBlZjI2MjI5NjU2M2FjY2QxY2I0YWFiNzkwMzIzZDJmZDU3MGQzMDIxNDUxMGJjZGFjZGFhNGYwM2Y1OTQ3N2VlZjEzZjJhZjVhZDEzZTMwNDQ=";
             function customerToken() {
                 var options = {
                     "currency": "USD",
@@ -120,16 +121,22 @@
                     data: JSON.stringify(body),
                     contentType: 'application/json',
                     success: function (token) {
-                        if (token)
-                            options["singleUseCustomerToken"] = token["singleUseCustomerToken"];
-                        checkout(options);
-                    }
+                            if (token)
+                                options["singleUseCustomerToken"] = token["singleUseCustomerToken"];
+                            checkout(options);
+                        },
+                    error: function(XHR,error, errorThrown) {
+                           if(XHR.status && XHR.status==400){
+                                alert(XHR.responseText);
+                           }else{
+                               alert("Something went wrong");
+                           }
+                      }
                 });
             }
 
             function checkout(options) {
-                paysafe.checkout.setup("cHVibGljLTc3NTE6Qi1xYTItMC01ZjAzMWNiZS0wLTMwMmQwMjE1MDA4OTBlZjI2MjI5NjU2M2FjY2QxY2I0YWFiNzkwMzIzZDJmZDU3MGQzMDIxNDUxMGJjZGFjZGFhNGYwM2Y1OTQ3N2VlZjEzZjJhZjVhZDEzZTMwNDQ=",
-                    options,
+                paysafe.checkout.setup(API_KEY, options,
                     function (instance, error, result) {
                         if (result && result.paymentHandleToken) {
                             var data = {
@@ -157,6 +164,13 @@
                                         setTimeout(function () { location.reload(); }, 1000);
                                     }
                                 },
+                                error: function(XHR,error, errorThrown) {
+                                       if(XHR.status && XHR.status==400){
+                                            alert(XHR.responseText);
+                                       }else{
+                                           alert("Something went wrong");
+                                       }
+                                  }
 
                             });
                         } else {
