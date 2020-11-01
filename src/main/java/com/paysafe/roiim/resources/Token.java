@@ -1,6 +1,10 @@
 package com.paysafe.roiim.resources;
 
-//this class holds attribute that we will send to paysafe server for processing request
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Token {
     private String paymentHandleToken;
     private String merchantRefNum;
@@ -16,52 +20,4 @@ public class Token {
         this.currencyCode = currencyCode;
     }
 
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getMerchantCustomerId() {
-        return merchantCustomerId;
-    }
-
-    public void setMerchantCustomerId(String merchantCustomerId) {
-        this.merchantCustomerId = merchantCustomerId;
-    }
-
-    public String getPaymentHandleToken() {
-        return paymentHandleToken;
-    }
-
-    public void setPaymentHandleToken(String paymentHandleToken) {
-        this.paymentHandleToken = paymentHandleToken;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public String getMerchantRefNum() {
-        return merchantRefNum;
-    }
-
-    public void setMerchantRefNum(String merchantRefNum) {
-        this.merchantRefNum = merchantRefNum;
-    }
 }

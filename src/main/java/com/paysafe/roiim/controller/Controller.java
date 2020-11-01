@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.paysafe.roiim.Constants.API_KEY;
+import static com.paysafe.roiim.Constants.*;
 
 
 @CrossOrigin
@@ -21,7 +21,7 @@ public class Controller {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/token")
+    @PostMapping(SINGLE_USER_CUSTOMER_TOKEN_ENDPOINT)
     @ResponseBody
     public SingleUseCustomerTokenRequest customerIdCheck(@RequestBody RequestDetails requestDetails) {
 
@@ -46,7 +46,7 @@ public class Controller {
     }
 
     //processing payment and save card
-    @PostMapping("/payment")
+    @PostMapping(PAYMENT_END_POINT)
     public HttpStatus payment(@RequestBody RequestDetails requestDetails) {
         Token token = new Token(requestDetails.getPaymentHandleToken(), requestDetails.getMerchantRefNum(),requestDetails.getAmount(),requestDetails.getCurrencyCode());
 
