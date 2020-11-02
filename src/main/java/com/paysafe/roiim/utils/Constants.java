@@ -1,4 +1,4 @@
-package com.paysafe.roiim;
+package com.paysafe.roiim.utils;
 
 public final class Constants {
     private Constants(){}

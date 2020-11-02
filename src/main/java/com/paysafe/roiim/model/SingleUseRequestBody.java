@@ -1,11 +1,11 @@
-package com.paysafe.roiim.resources;
+package com.paysafe.roiim.model;
 
-public class SingleUseReqBody {
+public class SingleUseRequestBody {
 
     String merchantRefNumber;
     String[] paymentTypes;
 
-    public SingleUseReqBody(String merchantRefNumber) {
+    public SingleUseRequestBody(String merchantRefNumber) {
         this.merchantRefNumber = merchantRefNumber;
         this.paymentTypes = new String[1];
     }

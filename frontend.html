@@ -120,9 +120,9 @@
                     type: 'post',
                     data: JSON.stringify(body),
                     contentType: 'application/json',
-                    success: function (token) {
-                            if (token)
-                                options["singleUseCustomerToken"] = token["singleUseCustomerToken"];
+                    success: function (tokenDetails) {
+                            if (tokenDetails)
+                                options["singleUseCustomerToken"] = tokenDetails["singleUseCustomerToken"];
                             checkout(options);
                         },
                     error: function(XHR,error, errorThrown) {

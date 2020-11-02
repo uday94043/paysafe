@@ -1,4 +1,4 @@
-package com.paysafe.roiim.resources;
+package com.paysafe.roiim.model;
 
 import lombok.Getter;
 import lombok.Setter;

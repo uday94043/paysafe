@@ -1,4 +1,4 @@
-package com.paysafe.roiim.resources;
+package com.paysafe.roiim.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

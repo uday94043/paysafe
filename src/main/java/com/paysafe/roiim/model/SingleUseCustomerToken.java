@@ -1,6 +1,6 @@
-package com.paysafe.roiim.resources;
+package com.paysafe.roiim.model;
 
-public class SingleUseCustomerTokenRequest {
+public class SingleUseCustomerToken {
     private String singleUseCustomerToken;
 
     public String getSingleUseCustomerToken() {

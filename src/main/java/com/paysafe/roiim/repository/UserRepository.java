@@ -1,6 +1,6 @@
 package com.paysafe.roiim.repository;
 
-import com.paysafe.roiim.resources.UserEntity;
+import com.paysafe.roiim.model.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

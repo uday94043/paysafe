@@ -1,11 +1,11 @@
-package com.paysafe.roiim.resources;
+package com.paysafe.roiim.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Token {
+public class TokenDetails {
     private String paymentHandleToken;
     private String merchantRefNum;
     private Integer amount;
@@ -13,7 +13,7 @@ public class Token {
     private String merchantCustomerId;
     private String customerId;
 
-    public Token(String paymentHandleToken, String merchantRefNum, Integer amount, String currencyCode) {
+    public TokenDetails(String paymentHandleToken, String merchantRefNum, Integer amount, String currencyCode) {
         this.paymentHandleToken = paymentHandleToken;
         this.merchantRefNum = merchantRefNum;
         this.amount = amount;
